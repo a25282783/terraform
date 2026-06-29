@@ -66,6 +66,14 @@ resource "aws_security_group" "web_sg" {
   }
 
   ingress {
+    description = "All traffic between nodes in the same SG (k3s cluster)"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    self        = true
+  }
+
+  ingress {
     description     = "SSH from EC2 Instance Connect"
     from_port       = 22
     to_port         = 22
@@ -94,7 +102,7 @@ data "aws_ami" "amazon_linux" {
 
 resource "aws_instance" "child-1" {
   ami             = data.aws_ami.amazon_linux.id
-  instance_type   = "t3.micro"
+  instance_type   = "t3.small"
   subnet_id       = aws_subnet.main_public.id
   vpc_security_group_ids = [aws_security_group.web_sg.id]
 
@@ -107,7 +115,7 @@ resource "aws_instance" "child-1" {
 
 resource "aws_instance" "child-2" {
   ami             = data.aws_ami.amazon_linux.id
-  instance_type   = "t3.micro"
+  instance_type   = "t3.small"
   subnet_id       = aws_subnet.main_public.id
   vpc_security_group_ids = [aws_security_group.web_sg.id]
 
@@ -120,7 +128,7 @@ resource "aws_instance" "child-2" {
 
 resource "aws_instance" "child-3" {
   ami             = data.aws_ami.amazon_linux.id
-  instance_type   = "t3.micro"
+  instance_type   = "t3.small"
   subnet_id       = aws_subnet.main_public.id
   vpc_security_group_ids = [aws_security_group.web_sg.id]
 
